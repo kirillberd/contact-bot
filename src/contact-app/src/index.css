@@ -1,0 +1,133 @@
+/* Сброс стилей для кросс-браузерной совместимости */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f2f5;
+  line-height: 1.6;
+}
+
+body {
+  margin: 1.5rem;
+}
+
+.navbar {
+  background-color: #007bff;
+  padding: 1rem;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 1rem;
+}
+
+.navbar-brand {
+  color: #333;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: #d4d4d4;
+}
+
+.navbar-nav {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.nav-link:hover {
+  color: #d4d4d4;
+}
+
+.container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff  ;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  body {
+    margin: 0;
+    padding: 0.5rem;
+  }
+
+  .navbar .container {
+    flex-direction: column;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .container {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+.tags-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.tag-text {
+  margin-right: 0.5rem;
+}
+
+.tag-remove {
+  cursor: pointer;
+}
+
+.tag-remove:hover {
+  color: #d4d4d4;
+}
