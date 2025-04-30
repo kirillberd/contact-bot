@@ -48,11 +48,10 @@ class ContactRepository(IContactRepository):
                 raise Exception("Could not connect to a database")
             else:
                 statement = select(Contact)
-
                 if tags:
                     statement = statement.where(func.arrayoverlap(Contact.tags, tags))
 
-                if region != "All":
+                if region and region != "All":
                     statement = statement.where(Contact.region == region)
 
                 result = [Contact.model_validate(contact) for contact in session.exec(statement).all()]

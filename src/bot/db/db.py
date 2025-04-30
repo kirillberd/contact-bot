@@ -1,24 +1,65 @@
-from motor.motor_asyncio import AsyncIOMotorClient
+import asyncpg
 from typing import List
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from urllib.parse import quote_plus
 
-class MongoClient():
-    def __init__(self, db_uri, db_name='', collection_name=''):
-        self._db_uri = db_uri
-        self._db_name = db_name
-        self._collection_name = collection_name
-        self._client = AsyncIOMotorClient(self._db_uri)
-        self._db = self._client[self._db_name]
-        self._collection = self._db[self._collection_name]
-        print('Connection to mongo established')
+
+class PostgresSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="postgres_")
+    user: str
+    password: str
+    dbname: str
+    host: str
+    port: int = 5432
+
+    @property
+    def dsn(self):
+        user_escaped = quote_plus(self.user)
+        password_escaped = quote_plus(self.password)
+        return f"postgres://{user_escaped}:{password_escaped}@{self.host}:{self.port}/{self.dbname}"
+
+
+class PostgresClient:
+    def __init__(self, table_name: str = ""):
+        self._settings = PostgresSettings()
+        self._table_name = table_name
+        self._pool = None
+
+    async def _ensure_pool(self):
+        if self._pool is None:
+            self._pool = await asyncpg.create_pool(self._settings.dsn)
+            print("Connection to PostgreSQL established")
 
     async def add_data(self, data: dict):
-        await self._collection.insert_one(data)
+        await self._ensure_pool()
+        async with self._pool.acquire() as conn:
+            columns = data.keys()
+            placeholders = ", ".join([f"${i+1}" for i in range(len(data))])
+            query = f"INSERT INTO {self._table_name} ({', '.join(columns)}) VALUES ({placeholders})"
+            await conn.execute(query, *data.values())
 
     async def add_data_list(self, data: List[dict]):
-        await self._collection.insert_many(data)
-
+        if not data:
+            return
+        await self._ensure_pool()
+        columns = data[0].keys()
+        for d in data[1:]:
+            if d.keys() != columns:
+                raise ValueError("All dictionaries must have the same keys")
+        values = [tuple(d.values()) for d in data]
+        async with self._pool.acquire() as conn:
+            placeholders = ", ".join([f"${i+1}" for i in range(len(columns))])
+            query = f"INSERT INTO {self._table_name} ({', '.join(columns)}) VALUES ({placeholders})"
+            await conn.executemany(query, values)
 
     async def get_data(self):
-        cursor = self._collection.find({}, {"_id": 0, "__v": 0 })
-        result = await cursor.to_list(None)
-        return result
+        await self._ensure_pool()
+        async with self._pool.acquire() as conn:
+            query = f"SELECT name, email, tags, notes, region FROM {self._table_name}"
+            rows = await conn.fetch(query)
+            return [dict(row) for row in rows]
+
+    async def close(self):
+        if self._pool is not None:
+            await self._pool.close()
+            self._pool = None
