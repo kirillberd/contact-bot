@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres_db
+    container_name: app-db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -20,16 +20,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - bagel
-
 volumes:
   postgres_data:
 
     
 
-networks:
-  bagel:
-    name: bagel;
-    driver: bridge
-  
