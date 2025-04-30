@@ -10,13 +10,10 @@ from .fsm import FSM
 from aiogram.fsm.context import FSMContext
 from io import BytesIO
 
-load_dotenv()
-# message router used with main dispatcher
 message_router = Router()
 
 
 
-# /start command handler in private messages
 @message_router.message(F.chat.type == 'private', CommandStart())
 async def command_start_handler(message: Message, state:FSMContext):
     await state.set_state(FSM.password)
@@ -32,7 +29,6 @@ async def handle_password(message:Message, state:FSMContext):
         await message.answer('Incorrect password.')
 
     
-# /csv command handler
 @message_router.message(FSM.authorized, Command('csv'))
 async def csv_export_handler(message: Message):
     await message.answer('Contacts list in csv format:')

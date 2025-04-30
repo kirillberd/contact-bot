@@ -1,13 +1,10 @@
-from db.db import MongoClient
-from os import getenv
-from dotenv import load_dotenv
+from db.db import PostgresClient
 import csv
 from typing import List, Dict
 import io
-load_dotenv()
 
 async def get_contacts():
-    client = MongoClient(getenv('DB_URI'),'test', 'users')
+    client = PostgresClient(table_name="contact")
     data = await client.get_data()
     return data
 
@@ -41,8 +38,7 @@ async def make_dicts_from_csv(buffer: io.BytesIO) -> List[Dict[str, str]]:
             row['tags'] = [tag.strip() for tag in tags_string.split(',')] if tags_string else []
             dicts.append(row)
         
-        print(dicts)
-        client = MongoClient(getenv('DB_URI'),'test', 'users')
+        client = PostgresClient("contact")
         await client.add_data_list(dicts)
         
     except Exception as e:
