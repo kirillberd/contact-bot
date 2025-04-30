@@ -1,11 +1,16 @@
 import axios from "axios";
 
-const API_LINK = "https://teamlistinfo.site" + "/api";
+const API_LINK = process.env.REACT_APP_API_URL;
 
 async function fetchContacts(payload) {
   try {
+    const response = await axios.get(API_LINK + "/contacts", {
+      params: {
+        tags: payload?.tags,   
+        region: payload?.region 
+      }
+    });
     
-    const response = await axios.post(API_LINK + "/fetch-contacts", payload);
     console.log("Contacts fetched:", response.data);
     return response.data;
   } catch (error) {
@@ -15,6 +20,7 @@ async function fetchContacts(payload) {
 
 async function insertContact(payload) {
   try {
+    console.log(API_LINK)
     const response = await axios.post(API_LINK + "/insert-contact", payload);
     console.log("Contact inserted:", response.data);
   } catch (error) {

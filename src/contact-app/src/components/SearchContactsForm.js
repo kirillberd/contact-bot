@@ -44,10 +44,10 @@ const SeacrhContactsForm = () => {
 
   const handleSave = async () => {
     if (editingContact != null && editingContact.tags.length != 0) {
-      await updateContact(editingContact, editingContact._id);
+      await updateContact(editingContact, editingContact.id);
       setContacts((prevContacts) =>
         prevContacts.map((contact) =>
-          contact._id === editingContact._id ? editingContact : contact
+          contact.id === editingContact.id ? editingContact : contact
         )
       );
       setEditingContact(null);
@@ -56,7 +56,7 @@ const SeacrhContactsForm = () => {
 
   const handleDelete = async (id) => {
     await deleteContact(id);
-    setContacts((prevContacts) => prevContacts.filter((emp) => emp._id !== id));
+    setContacts((prevContacts) => prevContacts.filter((emp) => emp.id !== id));
     setEditingContact(null);
   };
 

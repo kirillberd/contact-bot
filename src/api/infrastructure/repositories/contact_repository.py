@@ -52,7 +52,7 @@ class ContactRepository(IContactRepository):
                 if tags:
                     statement = statement.where(func.arrayoverlap(Contact.tags, tags))
 
-                if region:
+                if region != "All":
                     statement = statement.where(Contact.region == region)
 
                 result = [Contact.model_validate(contact) for contact in session.exec(statement).all()]
@@ -72,7 +72,7 @@ class ContactRepository(IContactRepository):
                 )
 
                 session.exec(statement)
-                logger.info(f"Updated task with id {id}")
+                logger.info(f"Updated contact with id {id}")
 
     def delete(self, id: int) -> None:
         with PostgresContextProvider(self.engine) as session:
@@ -82,4 +82,4 @@ class ContactRepository(IContactRepository):
             else:
                 statement = delete(Contact).where(Contact.id == id)
                 session.exec(statement)
-                logger.info(f"Deleted task with id {id}")
+                logger.info(f"Deleted contact with id {id}")

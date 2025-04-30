@@ -60,7 +60,7 @@ const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
           </button>
           <button
             className="btn btn-danger"
-            onClick={() => onDelete(contact._id)}
+            onClick={() => onDelete(contact.id)}
           >
             Delete
           </button>

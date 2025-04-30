@@ -92,3 +92,4 @@ async def delete_contact(
         raise HTTPException(
             status_code=500, detail="Internal server error while deleting contact"
         )
+
