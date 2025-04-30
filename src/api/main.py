@@ -1,14 +1,17 @@
 from fastapi import FastAPI
 import uvicorn
 from infrastructure.api.setup import setup
-from infrastructure.container import Contaner
+from infrastructure.container import Container
 
 def init():
     app = FastAPI()
-    container = Contaner()
+    container = Container()
     app.extra = container
     setup(app, container)
     return app
+
+
+
 
 app = init()
 if __name__ == "__main__":
