@@ -1,12 +1,35 @@
-FROM python:3.10-slim
+ARG PYTHON_BASE=3.10-slim
 
-WORKDIR /usr/src/app
+# Build stage
+FROM python:${PYTHON_BASE} AS builder
 
-COPY requirements.txt ./
+# Install PDM
+RUN pip install -U pdm
+ENV PDM_CHECK_UPDATE=false
 
-RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY pyproject.toml pdm.lock /project/
+WORKDIR /project
 
-CMD [ "python", "./main.py" ]
+# Install dependencies
+RUN pdm install --check --prod --no-lock --no-editable
 
+# Runtime stage
+FROM python:${PYTHON_BASE}
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PATH="/project/.venv/bin:${PATH}"
+
+# Copy application code and necessary files
+COPY --from=builder /project/.venv /project/.venv
+
+# Copy only required directories and files
+COPY main.py /app/
+COPY db /app/db
+COPY handlers /app/handlers
+COPY keyboards /app/keyboards
+
+WORKDIR /app
+
+CMD ["sh", "-c", "python main.py"]

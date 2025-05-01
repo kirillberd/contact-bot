@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Kirill", email = "kdberdyshev@gmail.com"},
 ]
-dependencies = ["aiogram>=3.20.0.post0", "loguru>=0.7.3", "psycopg2>=2.9.10", "asyncpg>=0.30.0", "pydantic-settings>=2.9.1"]
+dependencies = ["aiogram>=3.20.0.post0", "asyncpg>=0.30.0", "pydantic-settings>=2.9.1"]
 requires-python = "==3.10.*"
 readme = "README.md"
 license = {text = "MIT"}
