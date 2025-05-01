@@ -2,7 +2,7 @@
   "name": "employee-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://farekare.github.io/employee-app",
+  "homepage": "https://kirillberd.github.io/contact-bot",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
