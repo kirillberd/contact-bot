@@ -26,6 +26,7 @@ services:
       - DOMAIN_URL=teamlistinfo.site
     networks:
       - app-network
+    restart: unless-stopped
   
   certbot:
     build: 
