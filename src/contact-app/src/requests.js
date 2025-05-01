@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_LINK = process.env.REACT_APP_API_URL;
+const API_LINK = "https://teamlistinfo.site" + "/api";;
 
 async function fetchContacts(payload) {
   try {
