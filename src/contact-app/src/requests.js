@@ -10,7 +10,7 @@ async function fetchContacts(payload) {
         region: payload?.region 
       }
     });
-    
+    console.log(API_LINK)
     console.log("Contacts fetched:", response.data);
     return response.data;
   } catch (error) {
