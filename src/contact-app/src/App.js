@@ -10,8 +10,8 @@ function App() {
         <Navbar/>
         <div className="container">
           <Routes>
-            <Route path="/contact-bot" element={<AddContactForm />} />
-            <Route path="/contact-bot/search-contacts" element={<SeacrhContactsForm />}/>
+            <Route path="/employee-app" element={<AddContactForm />} />
+            <Route path="/employee-app/search-contacts" element={<SeacrhContactsForm />}/>
           </Routes>
         </div>
       </div>

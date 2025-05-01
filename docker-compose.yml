@@ -21,6 +21,13 @@ services:
       postgres:
         condition: service_healthy
 
+  frontend:
+    build: src/contact-app
+    env_file:
+      - ./.env
+    ports:
+      - "80:80"
+
 
     
 networks:
