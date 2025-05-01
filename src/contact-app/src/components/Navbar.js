@@ -5,10 +5,10 @@ const Navbar = () => {
     <div className="container">
       <ul className="navbar-nav">
         <li className="nav-item">
-          <Link className="nav-link" to="/employee-app">Add Contacts</Link>
+          <Link className="nav-link" to="/contact-bot">Add Contacts</Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/employee-app/search-contacts">Search Contacts</Link>
+          <Link className="nav-link" to="/contact-bot/search-contacts">Search Contacts</Link>
         </li>
       </ul>
     </div>
