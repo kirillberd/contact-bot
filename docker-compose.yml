@@ -2,19 +2,25 @@ version: '2.28'
 
 include:
   - ops/docker-compose.postgres.yml
+  - ops/docker-compose.nginx.yml
+
 
 services:
   bot:
     build: src/bot
     env_file: ./.env
+    expose:
+      - "5000"
     depends_on:
       - backend
+    networks:
+      - app-network
   
   backend:
     build: src/api
     env_file: ./.env
-    ports:
-      - "4000:4000"
+    expose:
+      - "4000"
     networks:
       - app-network
     depends_on:

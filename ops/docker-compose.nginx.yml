@@ -2,15 +2,48 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:latest
-    container_name: my_nginx
+    build:
+      context: ./ops/nginx
+    container_name: nginx
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./static:/usr/share/nginx/html
-      - ./nginx/logs:/var/log/nginx
+      - ./ops/nginx/conf.d:/etc/nginx/conf.d
+      - ./ops/nginx/certbot/www:/var/www/certbot
+      - ./ops/nginx/certbot/conf:/etc/letsencrypt
+      - ./ops/nginx/logs:/var/log/nginx
+    depends_on:
+      - backend
+      - bot
+    healthcheck:
+	test: ["CMD-SHELL", "curl --fail http://localhost || exit 1"]
+	interval: 10s
+	timeout: 5s
+	retries: 3
+    environment:
+      - DOMAIN_URL=teamlistinfo.site
     networks:
-      - app_network
+      - app-network
+  
+  certbot:
+    build: 
+      context: ./ops/certbot
     restart: unless-stopped
+    volumes:
+      - ./ops/nginx/certbot/www:/var/www/certbot
+      - ./ops/nginx/certbot/conf:/etc/letsencrypt
+    environment:
+      - DOMAIN_URL=teamlistinfo.site
+      - DOMAIN_EMAIL=m.egorov2004@gmail.com
+    depends_on:
+      nginx:
+	condition: service_healthy
+
+     networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
