@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   bot:
-    container_name: backend
+    container_name: bot
     build: src/bot
     env_file: ./.env
     depends_on:
