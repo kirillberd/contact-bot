@@ -23,16 +23,20 @@ services:
     restart: unless-stopped
 
   bot:
+    container_name: backend
     build: src/bot
     env_file: ./.env
     depends_on:
       - backend
+    networks:
+      - app-network
 
   backend:
+    container_name: backend
     build: src/api
     env_file: ./.env
-    ports:
-      - "4000:4000"
+    expose:
+      - 4000
     networks:
       - app-network
     depends_on:
@@ -40,6 +44,7 @@ services:
         condition: service_healthy
 
   frontend:
+    container_name: frontend
     build:
       context: src/contact-app
       args:
