@@ -49,13 +49,11 @@ class ContactRepository(IContactRepository):
             else:
                 statement = select(Contact)
                 if tags:
-                    statement = statement.where(func.arrayoverlap(Contact.tags, tags))
-
+                    statement = statement.where(Contact.tags.overlap(tags))
                 if region and region != "All":
                     statement = statement.where(Contact.region == region)
-
                 result = [Contact.model_validate(contact) for contact in session.exec(statement).all()]
-                logger.info(f"Fetched {len(result)} contacts.")
+                logger.info(f"Fetched {len(result)} contacts with region {region}, tags {tags}")
                 return result
 
     def update(self, contact: Contact, id: int) -> None:

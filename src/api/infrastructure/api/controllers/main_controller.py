@@ -35,7 +35,7 @@ async def insert_contact(
 @router.get("/contacts")
 @inject
 async def get_contacts(
-    tags: Optional[List[str]] = Query(None, description="Filter by tags (any match)"),
+    tags: Optional[List[str]] = Query(None, description="Filter by tags (any match)", alias="tags[]"),
     region: Optional[str] = Query(None, description="Filter by exact region match"),
     contact_repository: IContactRepository = Depends(
         Provide[Container.contact_repository]
