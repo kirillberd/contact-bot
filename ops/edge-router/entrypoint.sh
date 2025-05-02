@@ -51,7 +51,7 @@ EOF
   envsubst '${DOMAIN_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
   
   echo "Сертификат успешно получен для ${DOMAIN_URL}"
-fi else
+  else
   echo "Сертификат найден. Применяем полную конфигурацию с HTTPS..."
   envsubst '${DOMAIN_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 fi
