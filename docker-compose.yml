@@ -20,6 +20,7 @@ services:
     environment:
       - DOMAIN_URL=${DOMAIN_URL}
       - CERTBOT_EMAIL=${CERTBOT_EMAIL}
+    restart: unless-stopped
 
   bot:
     build: src/bot
