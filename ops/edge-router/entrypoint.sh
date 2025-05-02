@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-envsubst '${DOMAIN_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
-
 if [ -z "${DOMAIN_URL}" ] || [ -z "${CERTBOT_EMAIL}" ]; then
   echo "ERROR: DOMAIN_URL или CERTBOT_EMAIL не установлены"
   exit 1
@@ -10,7 +8,7 @@ fi
 
 if [ ! -d "/etc/letsencrypt/live/${DOMAIN_URL}" ]; then
   echo "Сертификат не найден. Создаем временную конфигурацию Nginx только для HTTP..."
-  cat > /etc/nginx/conf.d/temp.conf << EOF
+  cat > /etc/nginx/conf.d/default.conf << EOF
 server {
     listen 80;
     server_name ${DOMAIN_URL};
@@ -49,14 +47,16 @@ EOF
   nginx -s quit
   sleep 2
   
-  rm /etc/nginx/conf.d/temp.conf
-  
+  echo "Применяем полную конфигурацию с HTTPS..."
   envsubst '${DOMAIN_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
   
   echo "Сертификат успешно получен для ${DOMAIN_URL}"
+fi else
+  echo "Сертификат найден. Применяем полную конфигурацию с HTTPS..."
+  envsubst '${DOMAIN_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 fi
+
 
 /renew-certbot.sh &
 
-# Запуск Nginx
 exec nginx -g "daemon off;"
