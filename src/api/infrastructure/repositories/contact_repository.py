@@ -49,7 +49,7 @@ class ContactRepository(IContactRepository):
             else:
                 statement = select(Contact)
                 if tags:
-                    statement = statement.where(Contact.tags.overlap(tags))
+                    statement = statement.where(Contact.tags.contains(tags))
                 if region and region != "All":
                     statement = statement.where(Contact.region == region)
                 result = [Contact.model_validate(contact) for contact in session.exec(statement).all()]
