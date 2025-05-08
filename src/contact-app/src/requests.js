@@ -2,15 +2,23 @@ import axios from "axios";
 
 const API_LINK = process.env.REACT_APP_API_URL;
 
+const apiClient = axios.create({
+  baseURL: API_LINK,
+  headers: {
+    "api-key": process.env.REACT_APP_AUTH_TOKEN,
+  },
+
+});
+
 async function fetchContacts(payload) {
+  console.log(process.env.REACT_APP_AUTH_TOKEN)
   try {
-    const response = await axios.get(API_LINK + "/contacts", {
+    const response = await apiClient.get("/contacts", {
       params: {
-        tags: payload?.tags,   
-        region: payload?.region 
-      }
+        tags: payload?.tags,
+        region: payload?.region,
+      },
     });
-    console.log(API_LINK)
     console.log("Contacts fetched:", response.data);
     return response.data;
   } catch (error) {
@@ -20,9 +28,9 @@ async function fetchContacts(payload) {
 
 async function insertContact(payload) {
   try {
-    console.log(API_LINK)
-    const response = await axios.post(API_LINK + "/insert-contact", payload);
+    const response = await apiClient.post("/insert-contact", payload);
     console.log("Contact inserted:", response.data);
+    return response.data;
   } catch (error) {
     console.error("Error inserting contact:", error);
   }
@@ -30,16 +38,20 @@ async function insertContact(payload) {
 
 async function updateContact(payload, id) {
   try {
-    await axios.put(API_LINK + `/contacts/${id}`, payload);
+    const response = await apiClient.put(`/contacts/${id}`, payload);
+    return response.data;
   } catch (error) {
     console.error("Error updating contact:", error);
   }
 }
+
 async function deleteContact(id) {
   try {
-    await axios.delete(API_LINK + `/contacts/${id}`);
+    const response = await apiClient.delete(`/contacts/${id}`);
+    return response.data;
   } catch (error) {
     console.error("Error deleting contact:", error);
   }
 }
-export {fetchContacts, insertContact, updateContact, deleteContact};
+
+export { fetchContacts, insertContact, updateContact, deleteContact };
